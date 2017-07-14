@@ -1131,7 +1131,10 @@ function negotiate_protocol(smb, overrides)
     return true
   else 
     stdnse.debug1("Couldn't negotiate a SMBv1 connection:%s", dialect)
-    -- TODO: Try SMB2/SMB3 dialects if SMBv1 failed.
+    status, dialect = smb2.negotiate_v2(smb, overrides)
+    if status then
+      return true
+    end
     return false, string.format("Could not negotiate a connection:%s", dialect)
   end
 end
@@ -1356,6 +1359,11 @@ local function start_session_extended(smb, log_errors, overrides)
   local os, lanmanager
   local username, domain, password, password_hash, hash_type
   local busy_count = 0
+
+  -- If we are working with SMB2/SMB3, use smb2.start_session instead
+  if smb["smb2_protocol_enabled"] or smb["smb3_protocol_enabled"] then
+    return smb2.start_session(smb, log_errors, overrides)
+  end
 
   -- Set a default status_name, in case everything fails
   status_name = "An unknown error has occurred"
