@@ -392,6 +392,7 @@ function negotiate_v2(smb, overrides)
   if(smb['time'] == nil) then
     smb['time'] = 0
   end
+ 
   if(smb['timezone'] == nil) then
     smb['timezone'] = 0
   end
@@ -399,6 +400,8 @@ function negotiate_v2(smb, overrides)
   -- Convert the time and timezone to human readable values (taken from smb.lua)
   smb['time'] = (smb['time'] // 10000000) - 11644473600
   smb['date'] = os.date("%Y-%m-%d %H:%M:%S", smb['time'])
+  smb['start_time'] = (smb['start_time'] // 10000000) - 11644473600
+  smb['start_date'] = os.date("%Y-%m-%d %H:%M:%S", smb['start_time'])
 
   if status == 0 then
     return true, overrides['Dialects']
