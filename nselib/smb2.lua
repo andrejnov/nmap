@@ -268,6 +268,10 @@ function negotiate_v2(smb, overrides)
   local is_0311 = false -- Flag for SMB 3.11 
   local status, err
 
+  if not( overrides['Dialects'] ) then -- Set 2.02 as default dialect if user didn't select one
+    overrides['Dialects'] = {0x0202}
+  end
+
   header = smb2_encode_header_sync(smb, command_codes['SMB2_COM_NEGOTIATE'], overrides)
 
   -- We construct the first block that works for dialects 2.02 up to 3.11.
