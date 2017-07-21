@@ -6,11 +6,14 @@ local smb2 = require "smb2"
 
 description = [[
 Attempts to detect missing patches in Windows systems by checking the
-uptime returned during SMB2's protocol negotiation process. 
+uptime returned during the SMB2 protocol negotiation. 
 
-SMB2's protocol negotiation the system boot time is returned pre-authentication.
-This information can be used to determine if a system is missing critical
-patches without triggering IDS/IPS/AVs.
+SMB2 protocol negotiation response returns the system boot time
+ pre-authentication. This information can be used to determine
+ if a system is missing critical patches without triggering IDS/IPS/AVs.
+
+Remember that a rebooted system may still be vulnerable. This check
+only reveals unpatched systems based on the uptime, no additional probes are sent.
 ]]
 
 ---
@@ -18,8 +21,34 @@ patches without triggering IDS/IPS/AVs.
 -- @usage nmap -p445 --script vuln <target>
 --
 -- @output
+-- | smb2-vuln-uptime: 
+-- |   VULNERABLE:
+-- |   MS17-010: Security update for Windows SMB Server
+-- |     State: VULNERABLE
+-- |     IDs:  ms:ms17-010  CVE:2017-0147
+-- |       This system is missing a security update that resolves vulnerabilities in
+-- |        Microsoft Windows SMB Server.
+-- |       
+-- |     References:
+-- |       https://cve.mitre.org/cgi-bin/cvename.cgi?name=2017-0147
+-- |_      https://technet.microsoft.com/en-us/library/security/ms17-010.aspx
 --
 -- @xmloutput
+-- <table key="2017-0147">
+-- <elem key="title">MS17-010: Security update for Windows SMB Server</elem>
+-- <elem key="state">VULNERABLE</elem>
+-- <table key="ids">
+-- <elem>CVE:2017-0147</elem>
+-- <elem>ms:ms17-010</elem>
+-- </table>
+-- <table key="description">
+-- <elem>This system is missing a security update that resolves vulnerabilities in&#xa; Microsoft Windows SMB Server.&#xa;</elem>
+-- </table>
+-- <table key="refs">
+-- <elem>https://cve.mitre.org/cgi-bin/cvename.cgi?name=2017-0147</elem>
+-- <elem>https://technet.microsoft.com/en-us/library/security/ms17-010.aspx</elem>
+-- </table>
+-- </table>
 ---
 
 author = "Paulino Calderon <calderon()websec.mx>"
