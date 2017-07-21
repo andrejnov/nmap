@@ -33,19 +33,25 @@ end
 local ms_vulns = {
   {
     title = 'MS17-010: Security update for Windows SMB Server',
-    ids = {ms = "ms17-010"},
-    desc = '',
+    ids = {ms = "ms17-010", CVE = "2017-0147"},
+    desc = [[
+This system is missing a security update that resolves vulnerabilities in
+ Microsoft Windows SMB Server.
+]],
     disclosure_time = 1489471200,
     disclosure_date = {year=2017, month=3, day=14},
     references = {
     'https://technet.microsoft.com/en-us/library/security/ms17-010.aspx',
-    'https://blogs.technet.microsoft.com/msrc/2017/05/12/customer-guidance-for-wannacrypt-attacks/'
     },
    },
   {
     title = 'Microsoft Kerberos Checksum Vulnerability',
     ids = {ms = "ms14-068"},
-    desc = '',
+    desc = [[
+This security update resolves a privately reported vulnerability in Microsoft
+ Windows Kerberos KDC that could allow an attacker to elevate unprivileged
+ domain user account privileges to those of the domain administrator account.
+]],
     disclosure_time = 1416290400,
     disclosure_date = {year=2014, month=11, day=18},
     references = {
