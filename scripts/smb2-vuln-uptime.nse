@@ -41,12 +41,12 @@ This system is missing a security update that resolves vulnerabilities in
     disclosure_time = 1489471200,
     disclosure_date = {year=2017, month=3, day=14},
     references = {
-    'https://technet.microsoft.com/en-us/library/security/ms17-010.aspx',
+      'https://technet.microsoft.com/en-us/library/security/ms17-010.aspx',
     },
-   },
+  },
   {
     title = 'Microsoft Kerberos Checksum Vulnerability',
-    ids = {ms = "ms14-068"},
+    ids = {ms = "ms14-068", CVE = "2014-6324"},
     desc = [[
 This security update resolves a privately reported vulnerability in Microsoft
  Windows Kerberos KDC that could allow an attacker to elevate unprivileged
@@ -55,10 +55,9 @@ This security update resolves a privately reported vulnerability in Microsoft
     disclosure_time = 1416290400,
     disclosure_date = {year=2014, month=11, day=18},
     references = {
-    'https://technet.microsoft.com/en-us/library/security/ms17-010.aspx',
-    'https://blogs.technet.microsoft.com/msrc/2017/05/12/customer-guidance-for-wannacrypt-attacks/'
+      'https://technet.microsoft.com/en-us/library/security/ms14-068.aspx'
     },
-    },
+  },
 }
 
 local function check_vulns(host, port)
