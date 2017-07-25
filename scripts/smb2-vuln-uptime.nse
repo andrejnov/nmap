@@ -3,6 +3,7 @@ local vulns = require "vulns"
 local stdnse = require "stdnse"
 local string = require "string"
 local smb2 = require "smb2"
+local table = require "table"
 
 description = [[
 Attempts to detect missing patches in Windows systems by checking the
@@ -56,7 +57,17 @@ license = "Same as Nmap--See https://nmap.org/book/man-legal.html"
 categories = {"vuln", "safe"}
 
 hostrule = function(host)
-  return smb.get_port(host) ~= nil
+  local ms = false
+  local os_detection = stdnse.get_script_args(SCRIPT_NAME .. ".os-detection") or false
+  if host.os then
+    for k, v in pairs(host.os) do -- Loop through OS matches
+      stdnse.debug1("OS:%s", v['name'])
+      if string.match(v['name'], "Microsoft") then
+        ms = true
+      end
+    end
+  end
+  return (smb.get_port(host) ~= nil and ms) or (os_detection)
 end
 
 local ms_vulns = {
@@ -106,6 +117,7 @@ local function check_vulns(host, port)
     for _, vuln in pairs(ms_vulns) do
       if smbstate['start_time'] < vuln['disclosure_time'] then 
         stdnse.debug2("Vulnerability detected")
+        vuln.extra_info = string.format("The system hasn't been rebooted since %s", smbstate['start_date'])
         table.insert(vulns_detected, vuln)
       end
     end
@@ -127,7 +139,8 @@ action = function(host,port)
       local vuln = { title = v['title'], description = v['desc'],
             references = v['references'], disclosure_date = v['disclosure_date'],
             IDS = v['ids']}
-      vuln.state = vulns.STATE.VULN
+      vuln.state = vulns.STATE.LIKELY_VULN
+      vuln.extra_info = v['extra_info']
       report:add_vulns(SCRIPT_NAME, vuln)
     end
   end
